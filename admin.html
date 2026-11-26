@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard | Property Hub</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .admin-layout {
+            flex: 1;
+            display: grid;
+            grid-template-columns: 240px minmax(0, 1fr);
+        }
+
+        .admin-sidebar {
+            min-height: calc(100vh - 72px);
+            padding: 28px 18px;
+            background: var(--primary);
+            color: var(--white);
+        }
+
+        .admin-profile {
+            margin-bottom: 24px;
+            padding: 0 10px 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+        }
+
+        .admin-profile strong,
+        .admin-profile span {
+            display: block;
+        }
+
+        .admin-profile span {
+            color: rgba(255, 255, 255, 0.65);
+            font-size: 0.86rem;
+        }
+
+        .admin-nav {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .admin-nav button {
+            width: 100%;
+            border: 0;
+            border-radius: 8px;
+            padding: 11px 12px;
+            background: transparent;
+            color: rgba(255, 255, 255, 0.82);
+            font: inherit;
+            text-align: left;
+            cursor: pointer;
+        }
+
+        .admin-nav button:hover,
+        .admin-nav button.active {
+            background: rgba(255, 255, 255, 0.12);
+            color: var(--white);
+        }
+
+        .admin-main {
+            min-width: 0;
+            padding: 38px 4%;
+        }
+
+        .admin-heading {
+            margin-bottom: 24px;
+        }
+
+        .admin-heading h1 {
+            color: var(--primary);
+            font-size: clamp(1.8rem, 4vw, 2.5rem);
+        }
+
+        .admin-heading p {
+            color: var(--muted);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .stat-card {
+            padding: 20px;
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-top: 4px solid var(--secondary);
+            border-radius: 10px;
+            box-shadow: 0 8px 24px rgba(23, 37, 54, 0.06);
+        }
+
+        .stat-card span {
+            color: var(--muted);
+            font-size: 0.86rem;
+        }
+
+        .stat-card strong {
+            display: block;
+            margin-top: 4px;
+            color: var(--primary);
+            font-size: 1.55rem;
+        }
+
+        .admin-panel {
+            display: none;
+        }
+
+        .admin-panel.active {
+            display: block;
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 20px;
+        }
+
+        .panel-card {
+            min-width: 0;
+            padding: 22px;
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            box-shadow: 0 8px 24px rgba(23, 37, 54, 0.06);
+        }
+
+        .panel-card h2 {
+            margin-bottom: 14px;
+            color: var(--primary);
+            font-size: 1.25rem;
+        }
+
+        .table-wrap {
+            overflow-x: auto;
+        }
+
+        .user-list-note {
+            margin: -4px 0 16px;
+            color: var(--muted);
+            font-size: 0.9rem;
+        }
+
+        .user-list-message {
+            color: var(--muted);
+        }
+
+        .status {
+            display: inline-block;
+            padding: 4px 9px;
+            border-radius: 999px;
+            background: #def7e8;
+            color: #18733d;
+            font-size: 0.78rem;
+            font-weight: 800;
+        }
+
+        .status.pending {
+            background: #fff2d6;
+            color: #98620e;
+        }
+
+        .admin-form {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 16px;
+        }
+
+        .form-field {
+            display: flex;
+            flex-direction: column;
+            gap: 7px;
+        }
+
+        .form-field label {
+            font-size: 0.9rem;
+            font-weight: 700;
+        }
+
+        .admin-button {
+            border: 0;
+            border-radius: 8px;
+            padding: 11px 16px;
+            background: var(--secondary);
+            color: var(--white);
+            font: inherit;
+            font-weight: 800;
+            cursor: pointer;
+        }
+
+        .admin-button:hover,
+        .admin-button:focus-visible {
+            background: var(--secondary-dark);
+        }
+
+        .form-actions {
+            grid-column: 1 / -1;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .form-message {
+            color: var(--secondary-dark);
+            font-weight: 700;
+        }
+
+        @media (max-width: 900px) {
+            .admin-layout {
+                grid-template-columns: 1fr;
+            }
+
+            .admin-sidebar {
+                min-height: auto;
+                padding: 14px 4%;
+            }
+
+            .admin-profile {
+                display: none;
+            }
+
+            .admin-nav {
+                flex-direction: row;
+                overflow-x: auto;
+            }
+
+            .admin-nav button {
+                width: auto;
+                white-space: nowrap;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .admin-main {
+                padding: 28px 16px;
+            }
+
+            .stats-grid,
+            .admin-form {
+                grid-template-columns: 1fr;
+            }
+
+            .form-actions {
+                grid-column: 1;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="topbar">
+        <a class="brand" href="index.html" aria-label="Property Hub home">
+            Property<span>Hub</span>
+        </a>
+        <nav class="nav" aria-label="Main navigation">
+            <a href="index.html">View Site</a>
+            <a href="property.html">Properties</a>
+            <a href="payment.html">Payments</a>
+            <a href="login.html">Logout</a>
+        </nav>
+    </header>
+
+    <main class="admin-layout">
+        <aside class="admin-sidebar">
+            <div class="admin-profile">
+                <strong>Administrator</strong>
+                <span>Property Hub</span>
+            </div>
+            <nav class="admin-nav" aria-label="Admin navigation">
+                <button type="button" class="active" data-panel="overview">Overview</button>
+                <button type="button" data-panel="properties">Properties</button>
+                <button type="button" data-panel="payments">Payments</button>
+                <button type="button" data-panel="users">Users</button>
+            </nav>
+        </aside>
+
+        <section class="admin-main">
+            <div class="admin-heading">
+                <h1>Admin Dashboard</h1>
+                <p>Manage properties, tenants and payments.</p>
+            </div>
+
+            <div class="stats-grid">
+                <article class="stat-card">
+                    <span>Total Properties</span>
+                    <strong>48</strong>
+                </article>
+                <article class="stat-card">
+                    <span>Occupied Units</span>
+                    <strong>42</strong>
+                </article>
+                <article class="stat-card">
+                    <span>Active Tenants</span>
+                    <strong>67</strong>
+                </article>
+                <article class="stat-card">
+                    <span>Monthly Revenue</span>
+                    <strong>KSh 1.2M</strong>
+                </article>
+            </div>
+
+            <section class="admin-panel active" id="overview">
+                <div class="dashboard-grid">
+                    <article class="panel-card">
+                        <h2>Recent Payments</h2>
+                        <div class="table-wrap">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Tenant</th>
+                                        <th>Amount</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>James Mwangi</td>
+                                        <td>KSh 24,200</td>
+                                        <td><span class="status">Completed</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Sarah Njeri</td>
+                                        <td>KSh 18,500</td>
+                                        <td><span class="status pending">Pending</span></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </article>
+
+                    <article class="panel-card">
+                        <h2>Add Property</h2>
+                        <form id="property-form" class="admin-form">
+                            <div class="form-field">
+                                <label for="property-name">Property Name</label>
+                                <input type="text" id="property-name" name="property-name" required>
+                            </div>
+                            <div class="form-field">
+                                <label for="property-location">Location</label>
+                                <input type="text" id="property-location" name="property-location" required>
+                            </div>
+                            <div class="form-field">
+                                <label for="monthly-rent">Monthly Rent (KSh)</label>
+                                <input type="number" id="monthly-rent" name="monthly-rent" min="1" required>
+                            </div>
+                            <div class="form-field">
+                                <label for="unit-type">Unit Type</label>
+                                <select id="unit-type" name="unit-type" required>
+                                    <option value="">Select type</option>
+                                    <option>Apartment</option>
+                                    <option>House</option>
+                                    <option>Studio</option>
+                                </select>
+                            </div>
+                            <div class="form-actions">
+                                <button class="admin-button" type="submit">Save Property</button>
+                                <p id="property-message" class="form-message" role="status"></p>
+                            </div>
+                        </form>
+                    </article>
+                </div>
+            </section>
+
+            <section class="admin-panel" id="properties">
+                <article class="panel-card">
+                    <h2>Property Management</h2>
+                    <p>Use the property form on the Overview page to add a new listing.</p>
+                </article>
+            </section>
+
+            <section class="admin-panel" id="payments">
+                <article class="panel-card">
+                    <h2>Payment Management</h2>
+                    <p>Review completed and pending tenant payments.</p>
+                </article>
+            </section>
+
+            <section class="admin-panel" id="users">
+                <article class="panel-card">
+                    <h2>Active Users</h2>
+                    <p class="user-list-note">
+                        This demo page is not access-controlled. Use test accounts only;
+                        passwords are never displayed.
+                    </p>
+                    <div class="table-wrap">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Full Name</th>
+                                    <th>Username</th>
+                                    <th>Email</th>
+                                    <th>Phone</th>
+                                    <th>Status</th>
+                                    <th>Password</th>
+                                </tr>
+                            </thead>
+                            <tbody id="users-table-body">
+                                <tr>
+                                    <td colspan="6" class="user-list-message">Loading active users...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </article>
+            </section>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <p>Property Hub &copy; 2026</p>
+    </footer>
+
+    <script>
+        const navButtons = document.querySelectorAll(".admin-nav button");
+        const panels = document.querySelectorAll(".admin-panel");
+
+        navButtons.forEach(function (button) {
+            button.addEventListener("click", function () {
+                navButtons.forEach(function (item) {
+                    item.classList.remove("active");
+                });
+                panels.forEach(function (panel) {
+                    panel.classList.remove("active");
+                });
+
+                button.classList.add("active");
+                document.getElementById(button.dataset.panel).classList.add("active");
+            });
+        });
+
+        const propertyForm = document.getElementById("property-form");
+        const propertyMessage = document.getElementById("property-message");
+
+        propertyForm.addEventListener("submit", function (event) {
+            event.preventDefault();
+            propertyMessage.textContent = "Property saved successfully.";
+            propertyForm.reset();
+        });
+    </script>
+    <script src="auth.js"></script>
+</body>
+</html>

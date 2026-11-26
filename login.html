@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login | Property Hub</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .login-main {
+            flex: 1;
+            display: grid;
+            place-items: center;
+            padding: 48px 20px;
+        }
+
+        .login-card {
+            width: min(460px, 100%);
+            padding: 34px;
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            box-shadow: 0 16px 40px rgba(23, 37, 54, 0.1);
+        }
+
+        .login-heading {
+            margin-bottom: 24px;
+            text-align: center;
+        }
+
+        .login-heading h1 {
+            margin-bottom: 5px;
+            color: var(--primary);
+            font-size: 2rem;
+        }
+
+        .login-heading p {
+            color: var(--muted);
+        }
+
+
+        }
+
+        .login-form {
+            display: grid;
+            gap: 16px;
+        }
+
+        .login-field {
+            display: grid;
+            gap: 7px;
+        }
+
+        .login-field label {
+            font-size: 0.92rem;
+            font-weight: 700;
+        }
+
+        .forgot-password {
+            justify-self: end;
+            margin-top: -8px;
+            color: var(--secondary-dark);
+            font-size: 0.9rem;
+            font-weight: 700;
+        }
+
+        .login-field input:focus-visible {
+            outline: 3px solid rgba(32, 164, 90, 0.18);
+            border-color: var(--secondary);
+        }
+
+        .login-button {
+            width: 100%;
+            margin-top: 4px;
+            border: 0;
+            border-radius: 8px;
+            padding: 12px 18px;
+            background: var(--secondary);
+            color: var(--white);
+            font: inherit;
+            font-weight: 800;
+            cursor: pointer;
+            transition: background 160ms ease, transform 160ms ease;
+        }
+
+        .login-button:hover,
+        .login-button:focus-visible {
+            background: var(--secondary-dark);
+            transform: translateY(-1px);
+        }
+
+        .login-register {
+            margin-top: 20px;
+            color: var(--muted);
+            text-align: center;
+        }
+
+        .login-register a {
+            color: var(--secondary-dark);
+            font-weight: 700;
+        }
+
+        @media (max-width: 520px) {
+            .login-card {
+                padding: 26px 22px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="topbar">
+        <a class="brand" href="index.html" aria-label="Property Hub home">
+            Property<span>Hub</span>
+        </a>
+        <nav class="nav" aria-label="Main navigation">
+            <a href="index.html">Home</a>
+            <a href="about.html">About</a>
+            <a href="property.html">Properties</a>
+            <a href="contact.html">Contact</a>
+        </nav>
+    </header>
+
+    <main class="login-main">
+        <section class="login-card" aria-labelledby="login-title">
+            <div class="login-heading">
+                <h1 id="login-title">Welcome Back</h1>
+                <p>Sign in to your Property Hub account.</p>
+                <p class="auth-demo-note">Demo authentication only. Do not use a real or reused password.</p>
+            </div>
+
+            <form class="login-form" id="login-form">
+                <div class="login-field">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" name="username"
+                           autocomplete="username" required>
+                </div>
+
+                <div class="login-field">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password"
+                           autocomplete="current-password" required>
+                </div>
+
+                <a class="forgot-password" href="forgot-password.html">Forgot password?</a>
+                <p id="login-message" class="form-message" role="alert" aria-live="polite"></p>
+                <button class="login-button" type="submit">Login</button>
+            </form>
+
+            <p class="login-register">
+                Don't have an account? <a href="register.html">Create an account</a>
+            </p>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <p>Property Hub &copy; 2026</p>
+    </footer>
+
+    <script src="auth.js"></script>
+</body>
+</html>

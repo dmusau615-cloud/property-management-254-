@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Properties | Property Hub</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .properties-main {
+            width: min(1180px, 88%);
+            margin: 48px auto 64px;
+        }
+
+        .properties-heading {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            gap: 24px;
+            margin-bottom: 24px;
+        }
+
+        .properties-heading h1 {
+            color: var(--primary);
+            font-size: clamp(2rem, 5vw, 3rem);
+            line-height: 1.1;
+        }
+
+        .properties-heading p {
+            margin-top: 8px;
+            color: var(--muted);
+        }
+
+        .property-count {
+            color: var(--muted);
+            white-space: nowrap;
+        }
+
+        .property-filters {
+            display: grid;
+            grid-template-columns: minmax(220px, 1fr) repeat(3, minmax(130px, 180px));
+            gap: 12px;
+            margin-bottom: 28px;
+            padding: 16px;
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            box-shadow: 0 8px 24px rgba(23, 37, 54, 0.05);
+        }
+
+        .property-filters input,
+        .property-filters select {
+            height: 44px;
+        }
+
+        .property-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 20px;
+        }
+
+        .property-card {
+            overflow: hidden;
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(23, 37, 54, 0.07);
+            transition: transform 160ms ease, box-shadow 160ms ease;
+        }
+
+        .property-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 16px 38px rgba(23, 37, 54, 0.12);
+        }
+
+        .property-image {
+            position: relative;
+            height: 210px;
+            background: #dce5ed;
+        }
+
+        .property-image img {
+            width: 100%;
+            height: 100%;
+            display: block;
+            object-fit: cover;
+        }
+
+        .status-badge {
+            position: absolute;
+            top: 12px;
+            left: 12px;
+            padding: 6px 10px;
+            border-radius: 999px;
+            background: var(--secondary);
+            color: var(--white);
+            font-size: 0.78rem;
+            font-weight: 800;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.14);
+        }
+
+        .status-badge.pending {
+            background: #c58a32;
+        }
+
+        .property-content {
+            padding: 20px;
+        }
+
+        .property-content h2 {
+            margin-bottom: 5px;
+            color: var(--primary);
+            font-size: 1.18rem;
+        }
+
+        .property-location {
+            color: var(--muted);
+            font-size: 0.92rem;
+        }
+
+        .property-details {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 14px;
+            margin: 16px 0;
+            color: var(--muted);
+            font-size: 0.88rem;
+        }
+
+        .property-bottom {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            padding-top: 16px;
+            border-top: 1px solid var(--border);
+        }
+
+        .property-price {
+            color: var(--primary);
+            font-size: 1.12rem;
+            font-weight: 800;
+        }
+
+        .property-price span {
+            color: var(--muted);
+            font-size: 0.78rem;
+            font-weight: 500;
+        }
+
+        .property-bottom .btn {
+            padding: 9px 14px;
+            font-size: 0.88rem;
+        }
+
+        .no-properties {
+            grid-column: 1 / -1;
+            padding: 48px 20px;
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            text-align: center;
+            color: var(--muted);
+        }
+
+        .property-modal {
+            position: fixed;
+            inset: 0;
+            z-index: 30;
+            display: none;
+            place-items: center;
+            padding: 20px;
+            background: rgba(9, 30, 54, 0.58);
+        }
+
+        .property-modal.open {
+            display: grid;
+        }
+
+        .property-modal-card {
+            width: min(760px, 100%);
+            max-height: calc(100vh - 40px);
+            overflow-y: auto;
+            background: var(--white);
+            border-radius: 14px;
+            box-shadow: 0 24px 70px rgba(9, 30, 54, 0.28);
+        }
+
+        .modal-image {
+            position: relative;
+            height: 300px;
+        }
+
+        .modal-image img {
+            width: 100%;
+            height: 100%;
+            display: block;
+            object-fit: cover;
+            border-radius: 14px 14px 0 0;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            width: 38px;
+            height: 38px;
+            border: 0;
+            border-radius: 50%;
+            background: var(--white);
+            color: var(--primary);
+            font-size: 1.25rem;
+            cursor: pointer;
+        }
+
+        .modal-body {
+            padding: 24px;
+        }
+
+        .modal-body h2 {
+            color: var(--primary);
+            font-size: 1.7rem;
+        }
+
+        .modal-description {
+            margin: 14px 0 20px;
+            color: var(--muted);
+        }
+
+        .modal-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .btn-secondary {
+            background: var(--white);
+            color: var(--primary);
+            border: 1px solid var(--border);
+            box-shadow: none;
+        }
+
+        @media (max-width: 900px) {
+            .property-filters {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .property-filters input {
+                grid-column: 1 / -1;
+            }
+
+            .property-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        }
+
+        @media (max-width: 620px) {
+            .properties-main {
+                width: 90%;
+                margin-top: 32px;
+            }
+
+            .properties-heading {
+                align-items: flex-start;
+                flex-direction: column;
+                gap: 8px;
+            }
+
+            .property-filters,
+            .property-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .property-filters input {
+                grid-column: auto;
+            }
+
+            .modal-image {
+                height: 220px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="topbar">
+        <a class="brand" href="index.html" aria-label="Property Hub home">
+            Property<span>Hub</span>
+        </a>
+
+        <nav class="nav" aria-label="Main navigation">
+            <a href="index.html">Home</a>
+            <a href="property.html" aria-current="page">Properties</a>
+            <a href="payment.html">Payments</a>
+            <a href="announcement.html">Announcements</a>
+            <a href="login.html">Login</a>
+        </nav>
+    </header>
+
+    <main class="properties-main">
+        <section class="properties-heading">
+            <div>
+                <h1>Available Properties</h1>
+                <p>Find a home that fits your lifestyle and budget.</p>
+            </div>
+            <p class="property-count" id="propertyCount" aria-live="polite"></p>
+        </section>
+
+        <section class="property-filters" aria-label="Property filters">
+            <input type="search" id="propertySearch" placeholder="Search location or property name" aria-label="Search properties">
+            <select id="propertyType" aria-label="Property type">
+                <option value="all">All types</option>
+                <option value="Apartment">Apartment</option>
+                <option value="House">House</option>
+                <option value="Studio">Studio</option>
+            </select>
+            <select id="propertyStatus" aria-label="Availability status">
+                <option value="all">Any status</option>
+                <option value="Available">Available</option>
+                <option value="Pending">Pending</option>
+            </select>
+            <select id="priceRange" aria-label="Price range">
+                <option value="all">Any price</option>
+                <option value="under30">Under KSh 30,000</option>
+                <option value="30to50">KSh 30,000 - 50,000</option>
+                <option value="over50">Over KSh 50,000</option>
+            </select>
+        </section>
+
+        <section class="property-grid" id="propertyGrid" aria-label="Available properties"></section>
+    </main>
+
+    <div class="property-modal" id="propertyModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+        <div class="property-modal-card">
+            <div class="modal-image">
+                <img id="modalImage" src="" alt="">
+                <button class="modal-close" id="modalClose" type="button" aria-label="Close property details">&times;</button>
+            </div>
+            <div class="modal-body">
+                <h2 id="modalTitle"></h2>
+                <p class="property-location" id="modalLocation"></p>
+                <div class="property-details" id="modalDetails"></div>
+                <p class="modal-description" id="modalDescription"></p>
+                <div class="modal-actions">
+                    <button class="btn btn-secondary" id="modalCloseSecondary" type="button">Close</button>
+                    <a class="btn" href="payment.html">Make a payment</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <p>Property Hub &copy; 2026</p>
+    </footer>
+
+    <script>
+        const properties = [
+            {
+                name: "The Garden Apartments",
+                location: "Westlands, Nairobi",
+                type: "Apartment",
+                status: "Available",
+                price: 48000,
+                bedrooms: 2,
+                bathrooms: 2,
+                area: "1,150 sq ft",
+                image: "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=900&q=80",
+                description: "A bright modern apartment with an open-plan kitchen, spacious balconies and secure parking in a quiet Westlands neighborhood."
+            },
+            {
+                name: "Maple Grove Residence",
+                location: "Kilimani, Nairobi",
+                type: "House",
+                status: "Available",
+                price: 75000,
+                bedrooms: 3,
+                bathrooms: 3,
+                area: "2,100 sq ft",
+                image: "https://images.unsplash.com/photo-1564013799919-ab600027ffc6?auto=format&fit=crop&w=900&q=80",
+                description: "A family residence featuring a private garden, contemporary finishes, ample storage and 24-hour security."
+            },
+            {
+                name: "Riverside Studio",
+                location: "Thika Road, Nairobi",
+                type: "Studio",
+                status: "Available",
+                price: 22000,
+                bedrooms: 1,
+                bathrooms: 1,
+                area: "580 sq ft",
+                image: "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?auto=format&fit=crop&w=900&q=80",
+                description: "A compact, efficiently designed studio close to public transport, shops and major commuter routes."
+            },
+            {
+                name: "Parkview Manor",
+                location: "Kileleshwa, Nairobi",
+                type: "Apartment",
+                status: "Pending",
+                price: 55000,
+                bedrooms: 3,
+                bathrooms: 2,
+                area: "1,480 sq ft",
+                image: "https://images.unsplash.com/photo-1493663284031-b7e3aefcae8e?auto=format&fit=crop&w=900&q=80",
+                description: "An elegant apartment overlooking a green park, with generous living space, fitted kitchen and lift access."
+            },
+            {
+                name: "Palm Court",
+                location: "Lavington, Nairobi",
+                type: "Apartment",
+                status: "Available",
+                price: 62000,
+                bedrooms: 2,
+                bathrooms: 2,
+                area: "1,320 sq ft",
+                image: "https://images.unsplash.com/photo-1484154218962-a197022b5858?auto=format&fit=crop&w=900&q=80",
+                description: "A well-appointed apartment with leafy views, modern appliances, resident parking and easy access to local amenities."
+            },
+            {
+                name: "Cedar Lane Home",
+                location: "Karen, Nairobi",
+                type: "House",
+                status: "Pending",
+                price: 88000,
+                bedrooms: 4,
+                bathrooms: 3,
+                area: "2,800 sq ft",
+                image: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=900&q=80",
+                description: "A peaceful suburban home with four bedrooms, mature landscaping, an entertainment area and dedicated parking."
+            }
+        ];
+
+        const grid = document.getElementById("propertyGrid");
+        const searchInput = document.getElementById("propertySearch");
+        const typeFilter = document.getElementById("propertyType");
+        const statusFilter = document.getElementById("propertyStatus");
+        const priceFilter = document.getElementById("priceRange");
+        const propertyCount = document.getElementById("propertyCount");
+        const modal = document.getElementById("propertyModal");
+
+        function formatPrice(price) {
+            return new Intl.NumberFormat("en-KE", {
+                style: "currency",
+                currency: "KES",
+                maximumFractionDigits: 0
+            }).format(price);
+        }
+
+        function matchesPrice(price) {
+            if (priceFilter.value === "under30") return price < 30000;
+            if (priceFilter.value === "30to50") return price >= 30000 && price <= 50000;
+            if (priceFilter.value === "over50") return price > 50000;
+            return true;
+        }
+
+        function renderProperties() {
+            const query = searchInput.value.trim().toLowerCase();
+            const filtered = properties.filter(property => {
+                const matchesSearch = `${property.name} ${property.location}`.toLowerCase().includes(query);
+                const matchesType = typeFilter.value === "all" || property.type === typeFilter.value;
+                const matchesStatus = statusFilter.value === "all" || property.status === statusFilter.value;
+                return matchesSearch && matchesType && matchesStatus && matchesPrice(property.price);
+            });
+
+            propertyCount.textContent = `${filtered.length} of ${properties.length} properties`;
+
+            if (!filtered.length) {
+                grid.innerHTML = '<p class="no-properties">No properties match your filters. Try broadening your search.</p>';
+                return;
+            }
+
+            grid.innerHTML = filtered.map((property, index) => `
+                <article class="property-card">
+                    <div class="property-image">
+                        <img src="${property.image}" alt="${property.name}">
+                        <span class="status-badge ${property.status === "Pending" ? "pending" : ""}">${property.status}</span>
+                    </div>
+                    <div class="property-content">
+                        <h2>${property.name}</h2>
+                        <p class="property-location">${property.location}</p>
+                        <div class="property-details">
+                            <span>${property.bedrooms} bed${property.bedrooms === 1 ? "" : "s"}</span>
+                            <span>${property.bathrooms} bath${property.bathrooms === 1 ? "" : "s"}</span>
+                            <span>${property.area}</span>
+                        </div>
+                        <div class="property-bottom">
+                            <p class="property-price">${formatPrice(property.price)} <span>/ month</span></p>
+                            <button class="btn" type="button" data-property-index="${properties.indexOf(property)}">View details</button>
+                        </div>
+                    </div>
+                </article>
+            `).join("");
+
+            grid.querySelectorAll("[data-property-index]").forEach(button => {
+                button.addEventListener("click", () => openProperty(properties[Number(button.dataset.propertyIndex)]));
+            });
+        }
+
+        function openProperty(property) {
+            document.getElementById("modalImage").src = property.image;
+            document.getElementById("modalImage").alt = property.name;
+            document.getElementById("modalTitle").textContent = property.name;
+            document.getElementById("modalLocation").textContent = `${property.location} - ${property.type}`;
+            document.getElementById("modalDetails").innerHTML =
+                `<span>${property.bedrooms} bedrooms</span>
+                 <span>${property.bathrooms} bathrooms</span>
+                 <span>${property.area}</span>
+                 <span class="property-price">${formatPrice(property.price)} / month</span>`;
+            document.getElementById("modalDescription").textContent = property.description;
+            modal.classList.add("open");
+            document.body.style.overflow = "hidden";
+            document.getElementById("modalClose").focus();
+        }
+
+        function closeProperty() {
+            modal.classList.remove("open");
+            document.body.style.overflow = "";
+        }
+
+        [searchInput, typeFilter, statusFilter, priceFilter].forEach(control => {
+            control.addEventListener(control.tagName === "INPUT" ? "input" : "change", renderProperties);
+        });
+        document.getElementById("modalClose").addEventListener("click", closeProperty);
+        document.getElementById("modalCloseSecondary").addEventListener("click", closeProperty);
+        modal.addEventListener("click", event => {
+            if (event.target === modal) closeProperty();
+        });
+        document.addEventListener("keydown", event => {
+            if (event.key === "Escape" && modal.classList.contains("open")) closeProperty();
+        });
+
+        renderProperties();
+    </script>
+</body>
+</html>

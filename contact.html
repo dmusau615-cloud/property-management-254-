@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact | Property Hub</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .contact-main {
+            width: min(1180px, 88%);
+            margin: 48px auto 64px;
+        }
+
+        .contact-heading {
+            margin-bottom: 28px;
+        }
+
+        .contact-heading h1 {
+            color: var(--primary);
+            font-size: clamp(2rem, 5vw, 3rem);
+            line-height: 1.1;
+        }
+
+        .contact-heading p {
+            margin-top: 8px;
+            color: var(--muted);
+        }
+
+        .contact-layout {
+            display: grid;
+            grid-template-columns: minmax(0, 1.15fr) minmax(280px, 0.85fr);
+            gap: 24px;
+            align-items: start;
+        }
+
+        .contact-form,
+        .contact-details {
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(23, 37, 54, 0.07);
+        }
+
+        .contact-form {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 16px;
+            padding: 28px;
+        }
+
+        .contact-form h2 {
+            grid-column: 1 / -1;
+            color: var(--primary);
+            font-size: 1.45rem;
+        }
+
+        .form-field {
+            display: flex;
+            flex-direction: column;
+            gap: 7px;
+        }
+
+        .form-field.full {
+            grid-column: 1 / -1;
+        }
+
+        .form-field label {
+            font-size: 0.92rem;
+            font-weight: 700;
+        }
+
+        textarea {
+            min-height: 150px;
+            resize: vertical;
+        }
+
+        .contact-actions {
+            grid-column: 1 / -1;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .contact-actions button {
+            border: 0;
+            border-radius: 8px;
+            padding: 12px 18px;
+            background: var(--secondary);
+            color: var(--white);
+            font: inherit;
+            font-weight: 800;
+            cursor: pointer;
+        }
+
+        .contact-actions button:hover,
+        .contact-actions button:focus-visible {
+            background: var(--secondary-dark);
+        }
+
+        .form-message {
+            min-height: 24px;
+            color: var(--secondary-dark);
+            font-weight: 700;
+        }
+
+        .contact-details {
+            overflow: hidden;
+        }
+
+        .details-header {
+            padding: 22px 24px;
+            background: var(--primary);
+            color: var(--white);
+        }
+
+        .details-body {
+            display: grid;
+            gap: 18px;
+            padding: 24px;
+        }
+
+        .detail-item {
+            padding-bottom: 18px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .detail-item:last-child {
+            padding-bottom: 0;
+            border-bottom: 0;
+        }
+
+        .detail-item strong,
+        .detail-item span {
+            display: block;
+        }
+
+        .detail-item strong {
+            margin-bottom: 4px;
+            color: var(--primary);
+        }
+
+        .detail-item span,
+        .detail-item a {
+            color: var(--muted);
+        }
+
+        .detail-item a {
+            text-decoration: none;
+        }
+
+        @media (max-width: 900px) {
+            .contact-layout {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .contact-main {
+                width: 90%;
+                margin: 32px auto 48px;
+            }
+
+            .contact-form {
+                grid-template-columns: 1fr;
+                padding: 22px 20px;
+            }
+
+            .contact-form h2,
+            .form-field.full,
+            .contact-actions {
+                grid-column: 1;
+            }
+
+            .contact-actions {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="topbar">
+        <a class="brand" href="index.html" aria-label="Property Hub home">
+            Property<span>Hub</span>
+        </a>
+        <nav class="nav" aria-label="Main navigation">
+            <a href="index.html">Home</a>
+            <a href="about.html">About</a>
+            <a href="property.html">Properties</a>
+            <a href="payment.html">Payments</a>
+            <a href="contact.html" aria-current="page">Contact</a>
+        </nav>
+    </header>
+
+    <main class="contact-main">
+        <div class="contact-heading">
+            <h1>Contact Property Hub</h1>
+            <p>Send us a message and our property management team will respond.</p>
+        </div>
+
+        <div class="contact-layout">
+            <form id="contact-form" class="contact-form" action="#" method="post">
+                <h2>Send a Message</h2>
+                <div class="form-field">
+                    <label for="full-name">Full Name</label>
+                    <input type="text" id="full-name" name="full-name" autocomplete="name" required>
+                </div>
+                <div class="form-field">
+                    <label for="email">Email Address</label>
+                    <input type="email" id="email" name="email" autocomplete="email" required>
+                </div>
+                <div class="form-field">
+                    <label for="phone">Phone Number</label>
+                    <input type="tel" id="phone" name="phone" autocomplete="tel">
+                </div>
+                <div class="form-field">
+                    <label for="subject">Subject</label>
+                    <select id="subject" name="subject" required>
+                        <option value="">Choose a subject</option>
+                        <option value="property">Property enquiry</option>
+                        <option value="payment">Payment assistance</option>
+                        <option value="maintenance">Maintenance request</option>
+                        <option value="general">General enquiry</option>
+                    </select>
+                </div>
+                <div class="form-field full">
+                    <label for="message">Message</label>
+                    <textarea id="message" name="message" placeholder="How can we help you?" required></textarea>
+                </div>
+                <div class="contact-actions">
+                    <button type="submit">Send Message</button>
+                    <p class="form-message" role="status" aria-live="polite"></p>
+                </div>
+            </form>
+
+            <aside class="contact-details" aria-label="Property Hub contact information">
+                <div class="details-header">
+                    <h2>Contact Information</h2>
+                </div>
+                <div class="details-body">
+                    <div class="detail-item">
+                        <strong>Office Address</strong>
+                        <span>Westlands, Nairobi, Kenya</span>
+                    </div>
+                    <div class="detail-item">
+                        <strong>Phone</strong>
+                        <a href="tel:+254700000000">+254 700 000 000</a>
+                    </div>
+                    <div class="detail-item">
+                        <strong>Email</strong>
+                        <a href="mailto:info@propertyhub.example">info@propertyhub.example</a>
+                    </div>
+                    <div class="detail-item">
+                        <strong>Office Hours</strong>
+                        <span>Monday - Friday: 8:00 AM - 5:00 PM</span>
+                    </div>
+                </div>
+            </aside>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <p>Property Hub &copy; 2026</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

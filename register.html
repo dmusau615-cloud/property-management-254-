@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Get Started | Property Hub</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body class="register-page">
+    <header class="topbar">
+        <a class="brand" href="index.html" aria-label="Property Hub home">
+            Property<span>Hub</span>
+        </a>
+        <nav class="nav" aria-label="Main navigation">
+            <a href="index.html">Home</a>
+            <a href="property.html">Properties</a>
+            <a href="payment.html">Payments</a>
+            <a href="announcement.html">Announcements</a>
+            <a href="login.html">Login</a>
+        </nav>
+    </header>
+
+    <main class="register-main">
+        <section class="register-container" aria-labelledby="register-title">
+            <div class="register-header">
+                <h1 id="register-title">Create Account</h1>
+                <p>Join Property Hub and get started today.</p>
+                <p class="auth-demo-note">Demo sign-up only. Do not use a real or reused password.</p>
+            </div>
+
+            <form id="register-form" action="#" method="post">
+                <div class="input-group">
+                    <label for="fullname">Full Name</label>
+                    <input type="text" id="fullname" name="fullname"
+                           placeholder="Enter your full name"
+                           autocomplete="name" required>
+                </div>
+
+                <div class="input-group">
+                    <label for="email">Email Address</label>
+                    <input type="email" id="email" name="email"
+                           placeholder="Enter your email"
+                           autocomplete="email" required>
+                </div>
+
+                <div class="input-group">
+                    <label for="phone">Phone Number</label>
+                    <input type="tel" id="phone" name="phone"
+                           placeholder="Enter phone number"
+                           autocomplete="tel" required>
+                </div>
+
+                <div class="input-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" name="username"
+                           placeholder="Choose a username"
+                           autocomplete="username" minlength="3" required>
+                </div>
+
+                <div class="input-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password"
+                           placeholder="Enter password"
+                           autocomplete="new-password" minlength="8" required>
+                </div>
+
+                <div class="input-group">
+                    <label for="confirm-password">Confirm Password</label>
+                    <input type="password" id="confirm-password" name="confirm_password"
+                           placeholder="Confirm password"
+                           autocomplete="new-password" minlength="8" required>
+                </div>
+
+                <label class="terms" for="terms">
+                    <input type="checkbox" id="terms" name="terms" required>
+                    <span>I agree to the Terms and Privacy Policy.</span>
+                </label>
+
+                <p id="form-message" class="form-message" role="alert" aria-live="polite"></p>
+
+                <button type="submit" class="register-button">Create Account</button>
+
+                <p class="login-link">
+                    Already have an account?
+                    <a href="login.html">Login</a>
+                </p>
+            </form>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <p>Property Hub &copy; 2026</p>
+    </footer>
+
+    <script src="auth.js"></script>
+</body>
+</html>
